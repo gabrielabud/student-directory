@@ -18,7 +18,7 @@ def input_students
   hobby=gets.chomp
   if hobby.empty?
     puts "Let us know the hobby?"
-    hobby=gets.celete!("\n")
+    hobby=gets.delete!("\n")
     if hobby.empty?
       hobby="unknown".to_sym
     end
@@ -82,6 +82,10 @@ def print_footer(students)
 end
 
 students=input_students
-print_header
-print(students)
-print_footer(students)
+if students.length>0
+  print_header
+  print(students)
+  print_footer(students)
+else
+  puts
+end
