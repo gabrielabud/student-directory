@@ -1,14 +1,31 @@
 @students=[]
-
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
   name=STDIN.gets.chomp
+  puts "Please enter the cohort name"
+  cohort=STDIN.gets.chomp
   while !name.empty? do
-    @students << {name:name,cohort: :november}
+    add_students name, cohort
     puts "Now we have #{@students.count} students"
+    puts "Please enter the student name"
     name=STDIN.gets.chomp
+    puts "Please enter the cohort name"
+    cohort=STDIN.gets.chomp
   end
+end
+
+def load_students(filename="students.csv")
+  file=File.open(filename,"r")
+  file.readlines.each do |line|
+    name,cohort =line.chomp.split(',')
+    add_students name,cohort
+  end
+  file.close
+end
+
+def add_students name, cohort
+   @students << {name:name,cohort:cohort.to_sym}
 end
 
 def interactive_menu
@@ -75,14 +92,7 @@ def save_students
   file.close
 end
 
-def load_students(filename="students.csv")
-  file=File.open(filename,"r")
-  file.readlines.each do |line|
-    name,cohort =line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym}
-  end
-  file.close
-end
+
 
 def try_load_students
   filename=ARGV.first #first argument from the command line
