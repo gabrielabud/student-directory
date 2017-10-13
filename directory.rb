@@ -8,7 +8,7 @@ def input_students
   while !name.empty? do
     add_students name, cohort
     puts "Now we have #{@students.count} students"
-    puts "Please enter the student name"
+    puts "Please enter the next student's name"
     name=STDIN.gets.chomp
     puts "Please enter the cohort name"
     cohort=STDIN.gets.chomp
@@ -57,10 +57,13 @@ def process(selection)
     show_students
   when "3"
     save_students
+    puts "The file has been updated with the list of students provided"
   when "4"
     load_students
+    puts "file loaded"
   when "9"
     exit
+  else
     puts "I don't know what you mean, try again"
   end
 end
