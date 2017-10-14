@@ -15,7 +15,7 @@ def input_students
   end
 end
 
-def load_students(filename="students.csv")
+def load_students(filename)
   file=File.open(filename,"r")
   file.readlines.each do |line|
     name,cohort =line.chomp.split(',')
@@ -59,7 +59,9 @@ def process(selection)
     save_students
     puts "The file has been updated with the list of students provided"
   when "4"
-    load_students
+    puts "which file you load students to"
+    filename=STDIN.gets.chomp
+    load_students(filename)
     puts "file loaded"
   when "9"
     exit
@@ -85,7 +87,9 @@ end
 
 def save_students
   #open the file for writing
-  file=File.open("students.csv","w")
+  puts "Which is the name of the file"
+  file_inserted=STDIN.gets.chomp
+  file=File.open("#{file_inserted}","w")
   # iterate over the array of students
   @students.each do |student|
     student_data=[student[:name],student[:cohort]]
@@ -97,7 +101,17 @@ end
 
 def try_load_students
   filename=ARGV.first #first argument from the command line
-  filename="students.csv" if filename.nil? #get out of the method if it isn't given
+  if filename.nil?
+    puts "Would you like to load any file yes/no"
+    answ=STDIN.gets.chomp
+    if answ.upcase=="yes"
+      puts "Which is the file you would like to load"
+      filename=STDIN.gets.chomp
+    else
+      return
+    end
+  end
+  
   if File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
