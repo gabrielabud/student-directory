@@ -1,3 +1,4 @@
+require 'csv'
 @students=[]
 def input_students
   puts "Please enter the names of the students"
@@ -10,17 +11,20 @@ def input_students
     puts "Now we have #{@students.count} students"
     puts "Please enter the next student's name"
     name=STDIN.gets.chomp
-    puts "Please enter the cohort name"
-    cohort=STDIN.gets.chomp
+    if !name.empty?
+      puts "Please enter the cohort name"
+      cohort=STDIN.gets.chomp
+    else
+     return
+   end
   end
 end
 
 def load_students(filename)
-  file=File.open(filename,"r") do |wow|
-    wow.readlines.each do |line|
-      name,cohort =line.chomp.split(',')
+  CSV.foreach(filename) do |line|
+      name=line[0]
+      cohort=line[1]
       add_students name,cohort
-    end
   end
 end
 
@@ -59,7 +63,7 @@ def process(selection)
     save_students
     puts "The file has been updated with the list of students provided"
   when "4"
-    puts "which file you load students to"
+    puts "which file you load students from"
     filename=STDIN.gets.chomp
     load_students(filename)
     puts "file loaded"
@@ -89,14 +93,11 @@ def save_students
   #open the file for writing
   puts "Which is the name of the file"
   file_inserted=STDIN.gets.chomp
-  file=File.open("#{file_inserted}","w")
-  # iterate over the array of students
-  @students.each do |student|
-    student_data=[student[:name],student[:cohort]]
-    csv_line=student_data.join(",")
-    file.puts csv_line
+  CSV.open("#{file_inserted}","w") do |csv_object|
+    @students.each do |student|
+      csv_object << student
+    end
   end
-  file.close
 end
 
 def try_load_students
