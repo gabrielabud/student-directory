@@ -16,12 +16,12 @@ def input_students
 end
 
 def load_students(filename)
-  file=File.open(filename,"r")
-  file.readlines.each do |line|
-    name,cohort =line.chomp.split(',')
-    add_students name,cohort
+  file=File.open(filename,"r") do |wow|
+    wow.readlines.each do |line|
+      name,cohort =line.chomp.split(',')
+      add_students name,cohort
+    end
   end
-  file.close
 end
 
 def add_students name, cohort
@@ -104,14 +104,14 @@ def try_load_students
   if filename.nil?
     puts "Would you like to load any file yes/no"
     answ=STDIN.gets.chomp
-    if answ.upcase=="yes"
-      puts "Which is the file you would like to load"
+    if answ.upcase=="YES"
+      puts "Which is the file you would like to load from"
       filename=STDIN.gets.chomp
     else
       return
     end
   end
-  
+
   if File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
